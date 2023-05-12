@@ -130,8 +130,8 @@
         <el-form-item label="监控地址" prop="monitorAddress">
           <el-input v-model="form.monitorAddress" placeholder="请输入监控地址" />
         </el-form-item>
-        <el-form-item label="监控秘钥" prop="monitorAddress">
-          <el-input v-model="form.keys" placeholder="请输入监控秘钥" />
+        <el-form-item label="监控秘钥" prop="privateKey">
+          <el-input v-model="form.privateKey" placeholder="请输入监控秘钥" />
         </el-form-item>
         <el-form-item label="监控类型" prop="monitorType">
           <el-select v-model="form.monitorType" placeholder="请选择监控类型">
@@ -229,7 +229,7 @@ export default {
       this.form = {
         id: null,
         monitorAddress: null,
-        keys: null,
+        privateKey: null,
         monitorType: null,
         isMonitor: null,
         remark: null,
