@@ -136,7 +136,7 @@
       <el-table-column label="生成任务的交易单号" align="center" prop="comeTransaction" />
       <el-table-column label="生成任务的交易时间戳" align="center" prop="comeTime" width="180">
         <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.comeTime, '{y}-{m}-{d}') }}</span>
+          <span>{{ parseTime(scope.row.comeTime)}}</span>
         </template>
       </el-table-column>
       <el-table-column label="任务状态" align="center" prop="status">
