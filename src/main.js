@@ -2,6 +2,9 @@ import Vue from 'vue'
 
 import Cookies from 'js-cookie'
 
+//引入echart
+import echarts from 'echarts'
+
 import Element from 'element-ui'
 import './assets/styles/element-variables.scss'
 
@@ -48,6 +51,7 @@ Vue.prototype.selectDictLabel = selectDictLabel
 Vue.prototype.selectDictLabels = selectDictLabels
 Vue.prototype.download = download
 Vue.prototype.handleTree = handleTree
+Vue.prototype.$echarts=echarts
 
 // 全局组件挂载
 Vue.component('DictTag', DictTag)
