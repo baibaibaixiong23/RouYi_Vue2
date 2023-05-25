@@ -130,11 +130,15 @@
         </template>
       </el-table-column>
       <el-table-column label="目标地址" align="center" prop="toAddress" />
-      <el-table-column label="任务金额" align="center" prop="taskMoney" />
+      <el-table-column label="任务金额" align="center" prop="taskMoney" >
+        <template slot-scope="scope">
+          {{scope.row.taskMoney/1000000 }}
+        </template>
+      </el-table-column>
       <el-table-column label="任务地址" align="center" prop="formAddress" />
-      <el-table-column label="消耗TRX" align="center" prop="expendTrx" />
-      <el-table-column label="生成任务的交易单号" align="center" prop="comeTransaction" />
-      <el-table-column label="生成任务的交易时间戳" align="center" prop="comeTime" width="180">
+      <!-- <el-table-column label="消耗TRX" align="center" prop="expendTrx" /> -->
+      <el-table-column label="任务生成交易单号" align="center" prop="comeTransaction" />
+      <el-table-column label="任务生成时间" align="center" prop="comeTime" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.comeTime)}}</span>
         </template>
@@ -144,13 +148,13 @@
           <dict-tag :options="dict.type.transition_task_status" :value="scope.row.status"/>
         </template>
       </el-table-column>
-      <el-table-column label="任务创建的交易单号" align="center" prop="goTransaction" />
-      <el-table-column label="任务创建的交易时间戳" align="center" prop="goTime" width="180">
+      <el-table-column label="任务创建交易单号" align="center" prop="goTransaction" />
+      <!-- <el-table-column label="任务创建时间" align="center" prop="goTime" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.goTime, '{y}-{m}-{d}') }}</span>
         </template>
-      </el-table-column>
-      <el-table-column label="创建时间" align="center" prop="createdTime" width="180">
+      </el-table-column> -->
+      <!-- <el-table-column label="创建时间" align="center" prop="createdTime" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.createdTime, '{y}-{m}-{d}') }}</span>
         </template>
@@ -159,7 +163,7 @@
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.updatedTime, '{y}-{m}-{d}') }}</span>
         </template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button

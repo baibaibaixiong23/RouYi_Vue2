@@ -1,73 +1,83 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="转账单号" prop="transactionId">
-        <el-input
-          v-model="queryParams.transactionId"
-          placeholder="请输入转账单号"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="币种" prop="symbol">
-        <el-select v-model="queryParams.symbol" placeholder="请选择币种" clearable>
+      <el-form-item label="类型" prop="advanceType">
+        <el-select v-model="queryParams.advanceType" placeholder="请选择预支类型" clearable>
           <el-option
-            v-for="dict in dict.type.money_type"
+            v-for="dict in dict.type.advance_type"
             :key="dict.value"
             :label="dict.label"
             :value="dict.value"
           />
         </el-select>
       </el-form-item>
-      <!-- <el-form-item label="中转地址" prop="address">
-        <el-input
-          v-model="queryParams.address"
-          placeholder="请输入中转地址"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item> -->
-      <!-- <el-form-item label="币名" prop="nameSymbol">
-        <el-input
-          v-model="queryParams.nameSymbol"
-          placeholder="请输入币名"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item> -->
-      <el-form-item label="转账时间" prop="blockTimestamp">
-        <el-date-picker clearable
-          v-model="queryParams.blockTimestamp"
-          type="date"
-          value-format="yyyy-MM-dd"
-          placeholder="请选择转账时间">
-        </el-date-picker>
-      </el-form-item>
-      <el-form-item label="入款地址" prop="fromAddress">
-        <el-input
-          v-model="queryParams.fromAddress"
-          placeholder="请输入入款地址"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="收款地址" prop="toAddress">
+      <el-form-item label="目标地址" prop="toAddress">
         <el-input
           v-model="queryParams.toAddress"
-          placeholder="请输入收款地址"
+          placeholder="请输入目标地址"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="交易类型" prop="type">
-        <el-select v-model="queryParams.type" placeholder="请选择交易类型" clearable>
+      <el-form-item label="任务地址" prop="fromAddress">
+        <el-input
+          v-model="queryParams.fromAddress"
+          placeholder="请输入任务地址"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="交易单号" prop="advanceId">
+        <el-input
+          v-model="queryParams.advanceId"
+          placeholder="请输入交易单号"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="状态" prop="isStatus">
+        <el-select v-model="queryParams.isStatus" placeholder="请选择预支状态" clearable>
           <el-option
-            v-for="dict in dict.type.transaction_type"
+            v-for="dict in dict.type.advance_status"
             :key="dict.value"
             :label="dict.label"
             :value="dict.value"
           />
         </el-select>
+      </el-form-item>
+      <el-form-item label="生成时间" prop="comeTime">
+        <el-date-picker clearable
+          v-model="queryParams.comeTime"
+          type="date"
+          value-format="yyyy-MM-dd"
+          placeholder="请选择任务生成时间">
+        </el-date-picker>
+      </el-form-item>
+      <el-form-item label="结束时间" prop="goTime">
+        <el-input
+          v-model="queryParams.goTime"
+          placeholder="请输入任务结束时间"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="归还状态" prop="isReturnStatus">
+        <el-select v-model="queryParams.isReturnStatus" placeholder="请选择归还状态" clearable>
+          <el-option
+            v-for="dict in dict.type.is_return_status"
+            :key="dict.value"
+            :label="dict.label"
+            :value="dict.value"
+          />
+        </el-select>
+      </el-form-item>
+      <el-form-item label="用户id" prop="userId">
+        <el-input
+          v-model="queryParams.userId"
+          placeholder="请输入用户id"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
@@ -83,7 +93,7 @@
           icon="el-icon-plus"
           size="mini"
           @click="handleAdd"
-          v-hasPermi="['TransactionRecord:TransactionRecord:add']"
+          v-hasPermi="['advanceTask:advanceTask:add']"
         >新增</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -94,7 +104,7 @@
           size="mini"
           :disabled="single"
           @click="handleUpdate"
-          v-hasPermi="['TransactionRecord:TransactionRecord:edit']"
+          v-hasPermi="['advanceTask:advanceTask:edit']"
         >修改</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -105,7 +115,7 @@
           size="mini"
           :disabled="multiple"
           @click="handleDelete"
-          v-hasPermi="['TransactionRecord:TransactionRecord:remove']"
+          v-hasPermi="['advanceTask:advanceTask:remove']"
         >删除</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -115,41 +125,45 @@
           icon="el-icon-download"
           size="mini"
           @click="handleExport"
-          v-hasPermi="['TransactionRecord:TransactionRecord:export']"
+          v-hasPermi="['advanceTask:advanceTask:export']"
         >导出</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
-    <el-table v-loading="loading" :data="TransactionRecordList" @selection-change="handleSelectionChange" :default-sort = "{prop: 'blockTimestamp', order: 'descending'}">
+    <el-table v-loading="loading" :data="advanceTaskList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <!-- <el-table-column label="${comment}" align="center" prop="id" /> -->
-      <el-table-column label="转账单号" align="center" prop="transactionId" />
-      <el-table-column label="币种" align="center" prop="symbol">
+      <el-table-column label="id" align="center" prop="id" />
+      <el-table-column label="类型" align="center" prop="advanceType">
         <template slot-scope="scope">
-          <dict-tag :options="dict.type.money_type" :value="scope.row.symbol"/>
+          <dict-tag :options="dict.type.advance_type" :value="scope.row.advanceType"/>
         </template>
       </el-table-column>
-      <!-- <el-table-column label="TRC20合约地址" align="center" prop="address" /> -->
-      <!-- <el-table-column label="小数点" align="center" prop="decimals" /> -->
-      <!-- <el-table-column label="币名" align="center" prop="nameSymbol" /> -->
-      <el-table-column label="转账时间" align="center" prop="blockTimestamp" width="180" sortable>
+      <el-table-column label="目标地址" align="center" prop="toAddress" />
+      <el-table-column label="任务金额" align="center" prop="taskMoney">
         <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.blockTimestamp) }}</span>
+          {{scope.row.taskMoney/1000000 }}
         </template>
       </el-table-column>
-      <el-table-column label="入款地址" align="center" prop="fromAddress" />
-      <el-table-column label="收款地址" align="center" prop="toAddress" />
-      <el-table-column label="交易类型" align="center" prop="type">
+      <el-table-column label="任务地址" align="center" prop="fromAddress" />
+      <el-table-column label="交易单号" align="center" prop="advanceId" />
+      <el-table-column label="状态" align="center" prop="isStatus">
         <template slot-scope="scope">
-          <dict-tag :options="dict.type.transaction_type" :value="scope.row.type"/>
+          <dict-tag :options="dict.type.advance_status" :value="scope.row.isStatus"/>
         </template>
       </el-table-column>
-      <el-table-column label="交易金额" align="center" prop="moneyValue" >
+      <el-table-column label="生成时间" align="center" prop="comeTime" width="180">
         <template slot-scope="scope">
-          {{scope.row.moneyValue/1000000 }}
+          <span>{{ parseTime(scope.row.comeTime) }}</span>
         </template>
       </el-table-column>
+      <el-table-column label="结束时间" align="center" prop="goTime" />
+      <el-table-column label="归还状态" align="center" prop="isReturnStatus">
+        <template slot-scope="scope">
+          <dict-tag :options="dict.type.is_return_status" :value="scope.row.isReturnStatus"/>
+        </template>
+      </el-table-column>
+      <el-table-column label="用户id" align="center" prop="userId" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -157,14 +171,14 @@
             type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
-            v-hasPermi="['TransactionRecord:TransactionRecord:edit']"
+            v-hasPermi="['advanceTask:advanceTask:edit']"
           >修改</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
-            v-hasPermi="['TransactionRecord:TransactionRecord:remove']"
+            v-hasPermi="['advanceTask:advanceTask:remove']"
           >删除</el-button>
         </template>
       </el-table-column>
@@ -178,7 +192,7 @@
       @pagination="getList"
     />
 
-    <!-- 添加或修改TransactionRecord对话框 -->
+    <!-- 添加或修改预支任务对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
       </el-form>
@@ -191,11 +205,11 @@
 </template>
 
 <script>
-import { listTransactionRecord, getTransactionRecord, delTransactionRecord, addTransactionRecord, updateTransactionRecord } from "@/api/TransactionRecord/TransactionRecord";
+import { listAdvanceTask, getAdvanceTask, delAdvanceTask, addAdvanceTask, updateAdvanceTask } from "@/api/advanceTask/advanceTask";
 
 export default {
-  name: "TransactionRecord",
-  dicts: ['transaction_type', 'money_type'],
+  name: "AdvanceTask",
+  dicts: ['advance_type', 'advance_status', 'is_return_status'],
   data() {
     return {
       // 遮罩层
@@ -210,8 +224,8 @@ export default {
       showSearch: true,
       // 总条数
       total: 0,
-      // TransactionRecord表格数据
-      TransactionRecordList: [],
+      // 预支任务表格数据
+      advanceTaskList: [],
       // 弹出层标题
       title: "",
       // 是否显示弹出层
@@ -220,14 +234,15 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        transactionId: null,
-        symbol: null,
-        address: null,
-        nameSymbol: null,
-        blockTimestamp: null,
-        fromAddress: null,
+        advanceType: null,
         toAddress: null,
-        type: null,
+        fromAddress: null,
+        advanceId: null,
+        isStatus: null,
+        comeTime: null,
+        goTime: null,
+        isReturnStatus: null,
+        userId: null
       },
       // 表单参数
       form: {},
@@ -240,11 +255,11 @@ export default {
     this.getList();
   },
   methods: {
-    /** 查询TransactionRecord列表 */
+    /** 查询预支任务列表 */
     getList() {
       this.loading = true;
-      listTransactionRecord(this.queryParams).then(response => {
-        this.TransactionRecordList = response.rows;
+      listAdvanceTask(this.queryParams).then(response => {
+        this.advanceTaskList = response.rows;
         this.total = response.total;
         this.loading = false;
       });
@@ -258,16 +273,17 @@ export default {
     reset() {
       this.form = {
         id: null,
-        transactionId: null,
-        symbol: null,
-        address: null,
-        decimals: null,
-        nameSymbol: null,
-        blockTimestamp: null,
-        fromAddress: null,
+        advanceType: null,
         toAddress: null,
-        type: null,
-        moneyValue: null
+        taskMoney: null,
+        fromAddress: null,
+        fromKey: null,
+        advanceId: null,
+        isStatus: null,
+        comeTime: null,
+        goTime: null,
+        isReturnStatus: null,
+        userId: null
       };
       this.resetForm("form");
     },
@@ -291,16 +307,16 @@ export default {
     handleAdd() {
       this.reset();
       this.open = true;
-      this.title = "添加TransactionRecord";
+      this.title = "添加预支任务";
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
       this.reset();
       const id = row.id || this.ids
-      getTransactionRecord(id).then(response => {
+      getAdvanceTask(id).then(response => {
         this.form = response.data;
         this.open = true;
-        this.title = "修改TransactionRecord";
+        this.title = "修改预支任务";
       });
     },
     /** 提交按钮 */
@@ -308,13 +324,13 @@ export default {
       this.$refs["form"].validate(valid => {
         if (valid) {
           if (this.form.id != null) {
-            updateTransactionRecord(this.form).then(response => {
+            updateAdvanceTask(this.form).then(response => {
               this.$modal.msgSuccess("修改成功");
               this.open = false;
               this.getList();
             });
           } else {
-            addTransactionRecord(this.form).then(response => {
+            addAdvanceTask(this.form).then(response => {
               this.$modal.msgSuccess("新增成功");
               this.open = false;
               this.getList();
@@ -326,8 +342,8 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const ids = row.id || this.ids;
-      this.$modal.confirm('是否确认删除TransactionRecord编号为"' + ids + '"的数据项？').then(function() {
-        return delTransactionRecord(ids);
+      this.$modal.confirm('是否确认删除预支任务编号为"' + ids + '"的数据项？').then(function() {
+        return delAdvanceTask(ids);
       }).then(() => {
         this.getList();
         this.$modal.msgSuccess("删除成功");
@@ -335,9 +351,9 @@ export default {
     },
     /** 导出按钮操作 */
     handleExport() {
-      this.download('TransactionRecord/TransactionRecord/export', {
+      this.download('advanceTask/advanceTask/export', {
         ...this.queryParams
-      }, `TransactionRecord_${new Date().getTime()}.xlsx`)
+      }, `advanceTask_${new Date().getTime()}.xlsx`)
     }
   }
 };
